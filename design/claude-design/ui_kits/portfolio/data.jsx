@@ -1,0 +1,7 @@
+export const PROJECTS = [
+  { n: '01', title: 'Relay', client: 'Kestrel AI', desc: 'Support agent, demo to production', year: '2025', img: 'https://picsum.photos/seed/okoro-relay/1400/1100', metric: '38%', metricLabel: 'tickets resolved end-to-end', role: 'Tech lead', team: '5 engineers' },
+  { n: '02', title: 'Sounding', client: 'Open source', desc: 'Evaluation toolkit for speech and LLMs', year: '2024', img: 'https://picsum.photos/seed/okoro-sounding/1400/1100', metric: '3.1k stars', metricLabel: 'on GitHub', role: 'Creator, maintainer', team: '52 contributors' },
+  { n: '03', title: 'Foundry', client: 'Kestrel AI', desc: 'GPU serving platform migration', year: '2024', img: 'https://picsum.photos/seed/okoro-foundry/1400/1100', metric: '−58%', metricLabel: 'GPU cost per 1k requests', role: 'ML platform engineer', team: '4 engineers' },
+  { n: '04', title: 'Tripwire', client: 'Norrbank', desc: 'Real-time fraud scoring', year: '2022', img: 'https://picsum.photos/seed/okoro-tripwire/1400/1100', metric: '12 ms', metricLabel: 'p99 fraud scoring', role: 'Software → ML engineer', team: '6 engineers' },
+  { n: '05', title: 'Ohùn', client: 'NTNU Speech Lab', desc: 'Low-resource Yoruba ASR', year: '2019', img: 'https://picsum.photos/seed/okoro-ohun/1400/1100', metric: '18.4% WER', metricLabel: 'Yoruba ASR', role: 'Research assistant', team: 'NTNU Speech Lab' },
+];

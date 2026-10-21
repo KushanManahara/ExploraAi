@@ -1,0 +1,55 @@
+:root{
+  /* Base palette */
+  --km-paper:#EEF1F7;        /* page background */
+  --km-ink:#0B1530;          /* primary text, dark buttons */
+  --km-night:#070B16;        /* inverse sections, preloader, outcome panels */
+  --km-white:#FFFFFF;        /* active cards, contact section, logo tiles */
+  --km-mist:#DCE2EE;         /* image placeholder */
+  --km-panel:#151E36;        /* diagram nodes on night */
+  --km-panel-glass:rgba(13,20,38,.82);
+
+  /* Accent (user-tweakable on the live site: #4F6BFF · #6D7CFF · #1E9BFF) */
+  --km-accent:#4F6BFF;
+  --km-accent-deep:#3651E0;  /* accent text on paper (index numbers) */
+  --km-accent-soft:color-mix(in srgb,var(--km-accent) 55%,#fff); /* arrows on dark buttons */
+  --km-accent-wash:rgba(79,107,255,.13); /* hero radial glow */
+
+  /* Signals */
+  --km-signal:#5B8CFF;       /* clock dot */
+  --km-success:#2FBF71;      /* "available" pulse */
+  --km-warning:#FFB547;      /* legacy / problem path in diagrams */
+
+  /* Ink alpha ladder (rgba of #0B1530) */
+  --km-ink-a06:rgba(11,21,48,.06);
+  --km-ink-a07:rgba(11,21,48,.07);
+  --km-ink-a08:rgba(11,21,48,.08);
+  --km-ink-a10:rgba(11,21,48,.10);
+  --km-ink-a12:rgba(11,21,48,.12);
+  --km-ink-a16:rgba(11,21,48,.16);
+  --km-ink-a18:rgba(11,21,48,.18);
+  --km-ink-a20:rgba(11,21,48,.20);
+  /* Paper alpha ladder (on night) */
+  --km-paper-a08:rgba(255,255,255,.08);
+  --km-paper-a14:rgba(238,241,247,.14);
+  --km-paper-a20:rgba(238,241,247,.20);
+  --km-paper-a86:rgba(238,241,247,.86);
+
+  /* Semantic */
+  --bg-page:var(--km-paper);
+  --bg-inverse:var(--km-night);
+  --bg-contact:var(--km-white);
+  --surface-card:var(--km-white);
+  --surface-card-rest:rgba(255,255,255,.5);
+  --surface-soft:var(--km-ink-a06);   /* soft buttons, segmented track */
+  --surface-tag:var(--km-ink-a07);    /* mono tags */
+  --surface-glass:var(--km-paper-a86);/* sticky bars, image captions */
+  --surface-placeholder:var(--km-mist);
+  --fg-1:var(--km-ink);
+  --fg-inverse:var(--km-paper);
+  --fg-accent:var(--km-accent);
+  --border-hairline:var(--km-ink-a08);
+  --border-rule:var(--km-ink-a12);
+  --border-control:var(--km-ink-a18);
+  --border-strong:var(--km-ink);
+  --selection-bg:var(--km-accent);
+}

@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components" viewport="1100x760" name="Cards" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:24px}</style></head><body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+const KM = window.KushanManaharaDesignSystem_636c69;
+const K = KM; const R = (props) => <div style={{display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',...props.style}}>{props.children}</div>;
+const L = ({children}) => <div style={{font:'500 11px/1 var(--font-mono)',opacity:.5,textTransform:'uppercase',letterSpacing:'.06em',margin:'18px 0 10px'}}>{children}</div>;
+function App(){const {ExpertiseCard,QuoteCard,ProjectCard,ProjectRow}=K;return <div>
+<R style={{alignItems:'stretch'}}><div style={{width:340}}><ExpertiseCard n="01" mono="LLM" title="LLM agents & retrieval" desc="Grounded agents with tools, retrieval and an eval gate that decides what ships." tags={['LangGraph','pgvector','vLLM']} used={['Relay','Sounding']}/></div>
+<ProjectCard width={380} height={320} img="https://picsum.photos/seed/okoro-relay/1400/1100" n="01" title="Relay" year="2025" metric="38%" metricLabel="tickets resolved end-to-end"/>
+<QuoteCard style={{width:300}} company="Kestrel AI" quote="Sam turned our agent demo into something we could sell. The eval gate he built still decides what ships." who="Maya Lindqvist" role="VP Engineering" avatar="https://i.pravatar.cc/100?img=47"/></R>
+<L>Project rows</L><div style={{borderBottom:'1px solid var(--border-rule)'}}><ProjectRow n="01" title="Relay" client="Kestrel AI" desc="Support agent, demo to production" year="2025"/><ProjectRow featured={false} n="06" title="Speech VAD" client="Open source" desc="Tiny voice activity detector" kind="Model" year="2023"/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

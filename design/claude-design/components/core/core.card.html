@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components" viewport="700x520" name="Core" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:24px}</style></head><body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+const KM = window.KushanManaharaDesignSystem_636c69;
+const K = KM; const R = (props) => <div style={{display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',...props.style}}>{props.children}</div>;
+const L = ({children}) => <div style={{font:'500 11px/1 var(--font-mono)',opacity:.5,textTransform:'uppercase',letterSpacing:'.06em',margin:'18px 0 10px'}}>{children}</div>;
+function App(){const {Button,Tag,ArrowOrb,StatusDot,BrandMark,Eyebrow}=K;return <div>
+<L>Buttons</L><R><Button arrow>More about me</Button><Button variant="accent">Let's build</Button><Button variant="outline" arrow>See it in the projects</Button><Button variant="soft" arrow="← ">All work</Button><Button variant="link" arrow>Get in touch</Button></R>
+<R style={{marginTop:12}}><Button size="lg" orb="↓">Selected work</Button><Button count="11" arrow="↗">All projects</Button><Button variant="ink" disabled arrow>Disabled</Button><div style={{background:'var(--km-night)',padding:10,borderRadius:14}}><Button variant="light" arrow>Full write-up</Button></div></R>
+<L>Tags</L><R><Tag>PyTorch</Tag><Tag>pgvector</Tag><Tag variant="accent">Deep dive</Tag><Tag variant="outline">Relay</Tag><Tag variant="chip">LLM</Tag><Tag variant="chip" lamp="on">MLOPS</Tag><Tag variant="glass">Deep dive →</Tag></R>
+<L>Orbs · status · brand · eyebrow</L><R><ArrowOrb size={22} tone="accent" glyph="↓"/><ArrowOrb/><ArrowOrb size={72} tone="accent"/><StatusDot>Available for new work</StatusDot><StatusDot tone="signal">Oslo 14:02</StatusDot><BrandMark/><BrandMark variant="monogram"/><Eyebrow rule>ML & software engineer</Eyebrow></R>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

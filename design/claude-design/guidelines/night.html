@@ -1,0 +1,15 @@
+<!-- @dsCard group="Colors" viewport="700x220" subtitle="Inverse panels: night + resting accent glow + cursor-following spotlight" name="Night surfaces" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"><style>body{padding:24px;font-family:var(--font-sans)}
+.km-spot{position:relative;overflow:hidden;isolation:isolate;--mx:50%;--my:50%;transition:border-color .45s var(--ease-out)}
+.km-spot::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--glow-rest);pointer-events:none}
+.km-spot::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(280px circle at var(--mx) var(--my),color-mix(in srgb,var(--km-accent) 26%,transparent),transparent 70%);opacity:0;transition:opacity .45s var(--ease-out);pointer-events:none}
+.km-spot:hover{border-color:rgba(255,255,255,.16)!important}
+.km-spot:hover::before{opacity:1}
+@media (prefers-reduced-motion:reduce){.km-spot::before{display:none}}
+</style></head><body>
+<div class="km-spot" style="height:170px;box-sizing:border-box;border-radius:20px;background-color:#0d1426;border:1px solid var(--km-paper-a08);padding:20px;color:var(--fg-inverse);display:flex;flex-direction:column;justify-content:space-between"><span style="font:500 12px/1 var(--font-mono);opacity:.6">agent topology — relay</span><div style="display:flex;gap:12px"><span style="padding:14px 18px;border-radius:12px;background:var(--km-panel);border:1px solid rgba(255,255,255,.1);font:500 13px/1.4 var(--font-mono)">Tickets<br><span style="opacity:.55;font-size:11px">email + chat · 40k/wk</span></span><span style="display:flex;align-items:center;gap:8px;align-self:flex-end;padding:8px 12px;border-radius:99px;background:rgba(7,11,22,.8);border:1px solid rgba(255,255,255,.08);font:500 12px/1 var(--font-mono);color:var(--km-warning)"><span style="width:7px;height:7px;border-radius:50%;background:var(--km-warning)"></span>prompt-only · 11% invented policy</span></div></div>
+<script>
+document.querySelectorAll('.km-spot').forEach(el=>{let raf=0,x=0,y=0;
+el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();x=e.clientX-r.left;y=e.clientY-r.top;if(!raf)raf=requestAnimationFrame(()=>{raf=0;el.style.setProperty('--mx',x+'px');el.style.setProperty('--my',y+'px');});});});
+</script>
+</body></html>

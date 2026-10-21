@@ -1,0 +1,28 @@
+:root{
+  --font-sans:'Familjen Grotesk',system-ui,sans-serif;
+  --font-mono:'Spline Sans Mono',ui-monospace,monospace;
+
+  /* Display + headings — weight 500, very tight tracking */
+  --type-display-size:clamp(52px,7vw,128px);  --type-display-lh:.98; --type-display-ls:-.045em;
+  --type-mega-size:clamp(64px,10vw,190px);    --type-mega-lh:.9;   --type-mega-ls:-.055em;
+  --type-h1-size:clamp(52px,6.4vw,112px);     --type-h1-lh:.94;    --type-h1-ls:-.05em;
+  --type-h2-size:clamp(40px,4.2vw,74px);      --type-h2-lh:.98;    --type-h2-ls:-.045em;
+  --type-h3-size:clamp(36px,3.4vw,60px);      --type-h3-lh:1;      --type-h3-ls:-.045em;
+  --type-statement-size:clamp(26px,2.4vw,40px); --type-statement-lh:1.16; --type-statement-ls:-.035em;
+  --type-card-title-size:clamp(24px,2vw,34px);  --type-card-title-lh:1.05; --type-card-title-ls:-.035em;
+  --type-stat-size:clamp(44px,4.6vw,80px);      --type-stat-lh:1;    --type-stat-ls:-.05em;
+  --type-title-size:20px; --type-title-ls:-.025em;
+
+  /* Body */
+  --type-lead-size:17px;  --type-lead-lh:1.55;  --type-lead-opacity:.72;
+  --type-body-size:15px;  --type-body-lh:1.55;  --type-body-opacity:.74;
+  --type-ui-size:14px;    /* buttons, nav */
+  --type-small-size:12.5px;
+
+  /* Mono labels */
+  --type-eyebrow:500 12px/1 var(--font-mono); --type-eyebrow-ls:.06em; --type-eyebrow-opacity:.6;
+  --type-mono-sm:500 11px/1 var(--font-mono);
+
+  --weight-regular:400; --weight-medium:500; --weight-semibold:600;
+  --em-muted:color-mix(in srgb,currentColor 40%,transparent); /* @kind color */ /* headline emphasis tail — two-tone ink, no italics */
+}

@@ -1,0 +1,25 @@
+:root{
+  --shadow-card-hover:0 30px 60px -30px rgba(11,21,48,.35);
+  --shadow-quote:0 24px 50px -24px rgba(11,21,48,.35);
+  --shadow-project:0 50px 80px -44px rgba(11,21,48,.5);
+  --shadow-nav:inset 0 1px 0 rgba(255,255,255,.14),0 1px 2px rgba(11,21,48,.06),0 10px 28px -10px rgba(11,21,48,.22);
+  --shadow-lens:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.08),0 10px 22px -10px rgba(11,21,48,.6);
+  --shadow-tile:0 0 0 1px rgba(11,21,48,.1);
+  --ring-signal:0 0 0 4px rgba(91,140,255,.22);
+
+  --blur-bar:blur(14px); /* @kind other */
+  --blur-nav:blur(18px) saturate(1.4); /* @kind other */
+
+  --ease-out:cubic-bezier(.2,.8,.1,1); /* @kind other */ /* the house curve */
+  --ease-pulse:cubic-bezier(.2,.7,.1,1); /* @kind other */
+  --dur-fast:.3s; /* @kind other */
+  --dur-base:.35s; /* @kind other */
+  --dur-slow:.45s; /* @kind other */
+  --dur-lens:.55s; /* @kind other */
+
+  --scrim-media:linear-gradient(180deg,rgba(11,21,48,.28),rgba(11,21,48,0) 30%,rgba(11,21,48,0) 50%,rgba(11,21,48,.66)); /* @kind color */
+  --glow-rest:radial-gradient(70% 90% at 100% 0%,color-mix(in srgb,var(--km-accent) 16%,transparent),transparent 70%); /* @kind other */
+  --spotlight-color:color-mix(in srgb,var(--km-accent) 26%,transparent); /* @kind color */ /* cursor spotlight: radial-gradient(280px circle at var(--mx) var(--my), this, transparent 70%) — write the gradient on the element, not via a :root var, so --mx/--my resolve per element */
+  --spotlight-size:280px; /* @kind other */
+}
+@keyframes km-pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(3.2);opacity:0}}

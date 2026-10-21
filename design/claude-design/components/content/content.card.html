@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components" viewport="900x560" name="Content" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:24px}</style></head><body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+const KM = window.KushanManaharaDesignSystem_636c69;
+const K = KM; const R = (props) => <div style={{display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',...props.style}}>{props.children}</div>;
+const L = ({children}) => <div style={{font:'500 11px/1 var(--font-mono)',opacity:.5,textTransform:'uppercase',letterSpacing:'.06em',margin:'18px 0 10px'}}>{children}</div>;
+function App(){const {SectionHeading,Em,FactList,Stat,ToolTile}=K;return <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:32}}>
+<div><SectionHeading eyebrow="Expertise" title={<>What I <Em>build.</Em></>} lead="Most projects touch three or four of these at once."/>
+<L>Stats</L><R style={{gap:36}}><Stat value="38%" label="tickets resolved end-to-end"/><Stat variant="compact" value="−58%" label="GPU cost / 1k req"/></R></div>
+<div><L>Fact list</L><FactList rows={[{k:'Now',v:'Lead ML engineer, Kestrel AI'},{k:'Based',v:'Oslo, Norway'},{k:'Focus',v:'LLM agents, evaluation, serving'}]}/>
+<L>Meta list</L><FactList variant="meta" rows={[{k:'Role',v:'Tech lead'},{k:'Team',v:'5 engineers'},{k:'Stack',v:'LangGraph · pgvector · vLLM'}]}/>
+<L>Tool tiles</L><ToolTile abbr="PT" bg="#FFE3D9" name="PyTorch" note="Training, custom kernels"/><ToolTile abbr="PG" bg="#DCE6F5" name="PostgreSQL" note="pgvector for retrieval"/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

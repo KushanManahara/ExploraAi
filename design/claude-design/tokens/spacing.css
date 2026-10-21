@@ -1,0 +1,22 @@
+:root{
+  /* Layout */
+  --gutter:3vw;           /* page side padding */
+  --col-gap:2vw;          /* 12-column grid gap */
+  --grid-cols:12; /* @kind other */
+  --section-y:20vh;       /* typical section top padding (20–24vh) */
+  --sticky-top:14vh;      /* sticky left columns */
+
+  /* Spacing scale (px values used in source) */
+  --space-1:4px; --space-2:6px; --space-3:8px; --space-4:10px; --space-5:12px;
+  --space-6:14px; --space-7:16px; --space-8:18px; --space-9:22px; --space-10:26px; --space-11:28px;
+
+  /* Radii */
+  --radius-mark:6px;      /* brand square */
+  --radius-tile:9px;      /* tool logo tile */
+  --radius-node:12px;     /* diagram nodes */
+  --radius-row:14px;      /* list row hover */
+  --radius-media:18px;    /* portrait, quote cards, gallery */
+  --radius-card:20px;     /* service + project cards, hero media */
+  --radius-sheet:44px;    /* section sheet that slides over the previous one */
+  --radius-pill:99px;     /* every button, tag, nav */
+}

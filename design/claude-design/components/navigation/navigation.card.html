@@ -1,0 +1,27 @@
+<!-- @dsCard group="Components" viewport="1100x480" name="Navigation" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{margin:0;padding:24px}</style></head><body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+const K = window.KushanManaharaDesignSystem_636c69;
+const L = ({children}) => <div style={{font:'500 11px/1 var(--font-mono)',opacity:.5,textTransform:'uppercase',letterSpacing:'.06em',margin:'18px 0 10px'}}>{children}</div>;
+const Rows = ({n,label}) => Array.from({length:n},(_,i)=><div key={i} style={{display:'grid',gridTemplateColumns:'60px 1fr auto',gap:16,padding:'22px 0',borderTop:'1px solid color-mix(in srgb,currentColor 12%,transparent)',font:'500 22px/1.1 var(--font-sans)',letterSpacing:'-.03em'}}><span style={{font:'500 12px/1 var(--font-mono)',opacity:.55}}>{String(i+1).padStart(2,'0')}</span><span>{label}</span><span style={{font:'500 12px/1 var(--font-mono)',opacity:.55}}>2025</span></div>);
+function App(){const {NavBar,SegmentedLens}=K;const [a,setA]=React.useState('Home');const [v,setV]=React.useState('02');const box=React.useRef(null);
+const jump=l=>{setA(l);const t=box.current.querySelector('#nav-'+l.toLowerCase());if(t)box.current.scrollTo({top:t.offsetTop,behavior:'smooth'});};
+return <div>
+<L>Floating · scroll or click Home / About / Projects</L>
+<div ref={box} style={{height:320,overflow:'auto',borderRadius:'var(--radius-card)',background:'var(--km-paper)',color:'var(--km-ink)',border:'1px solid var(--line)',position:'relative'}}>
+<NavBar position="sticky" scrollTarget={box} active={a} onNavigate={jump} links={['Home','About','Projects']}/>
+<div style={{marginTop:-74}}>
+<section id="nav-home" data-nav-theme="light" style={{padding:'100px 3vw 40px'}}><div style={{height:120,borderRadius:'var(--radius-media)',background:'var(--km-accent)',marginBottom:20}}></div><Rows n={4} label="Light section — ink navbar"/></section>
+<section id="nav-about" data-nav-theme="dark" style={{padding:'60px 3vw',background:'var(--km-night)',color:'var(--km-paper)'}}><Rows n={5} label="Dark section — paper navbar"/></section>
+<section id="nav-projects" data-nav-theme="light" style={{padding:'60px 3vw 200px'}}><Rows n={5} label="Back to light"/></section>
+</div></div>
+<L>Segmented lens</L><SegmentedLens items={['01','02','03','04','05']} value={v} onChange={setV}/>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>
