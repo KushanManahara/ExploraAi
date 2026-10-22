@@ -1,0 +1,97 @@
+# .github/workflows/ci.yml
+# CONTINUOUS INTEGRATION: LINT, FORMAT, TYPE CHECK, TEST AND BUILD FOR THE PYTHON AND WEB CODE.
+# SECURITY RULES (PLAN §5, §10.1):
+#   - READ-ONLY TOKEN, NO SECRETS, NO CACHES (AVOIDS CACHE POISONING).
+#   - ONLY GITHUB-AUTHORED ACTIONS, EACH PINNED TO A FULL COMMIT SHA (VERIFIED AGAINST ITS RELEASE TAG).
+#   - PNPM COMES FROM COREPACK (VERIFIES THE packageManager INTEGRITY HASH); UV IS HASH-PINNED FROM PYPI.
+# SECURITY SCANNING (TRIVY) IS ADDED IN M0B STEP 5.
+
+name: CI
+
+on:
+  push:
+    branches: ["master", "claude/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python (ruff, mypy, pytest)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      # USE THE INTERPRETER FROM setup-python; NEVER DOWNLOAD ANOTHER ONE.
+      UV_PYTHON_DOWNLOADS: never
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python (version from .python-version)
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: .python-version
+
+      - name: Install uv (hash-pinned)
+        run: "python -m pip install --require-hashes --only-binary=:all: --no-deps -r .github/ci/uv-requirements.txt"
+
+      - name: Install dependencies (lockfile must be up to date)
+        run: uv sync --all-packages --locked
+
+      - name: Ruff lint
+        run: uv run --no-sync ruff check .
+
+      - name: Ruff format check
+        run: uv run --no-sync ruff format --check .
+
+      - name: Mypy (strict)
+        run: uv run --no-sync mypy
+
+      - name: Pytest
+        run: uv run --no-sync pytest
+
+  web:
+    name: Web (eslint, tsc, prettier, vitest, build)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js (version from .node-version)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Enable pnpm via Corepack (pinned version and integrity hash from package.json)
+        run: corepack enable
+
+      - name: Install dependencies (lockfile must be up to date)
+        run: pnpm install --frozen-lockfile
+
+      - name: ESLint
+        run: pnpm lint
+
+      - name: TypeScript type check
+        run: pnpm typecheck
+
+      - name: Prettier check
+        run: pnpm format:check
+
+      - name: Vitest
+        run: pnpm test
+
+      - name: Next.js production build
+        run: pnpm build

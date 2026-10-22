@@ -79,3 +79,40 @@ Milestone M0b (plan §10.1), run one step at a time with owner approval before e
 
 ### Cost
 - $0. No external resources, settings or services changed.
+
+## Step 4 — CI workflow (this step)
+
+### Changes
+- `.github/workflows/ci.yml` with two jobs on `ubuntu-24.04` (15-minute timeout each), running on pushes to `master` and `claude/**` and on pull requests:
+  - **python:** `uv sync --locked`, `ruff check`, `ruff format --check`, strict `mypy`, `pytest`.
+  - **web:** `pnpm install --frozen-lockfile`, ESLint, `tsc --noEmit`, Prettier check, Vitest, `next build`.
+- `.github/ci/uv-requirements.txt`: uv 0.11.32 pinned by SHA-256 (PyPI manylinux x86_64 wheel), installed with `--require-hashes --only-binary=:all:`.
+
+### Security choices
+- Workflow-wide `permissions: contents: read`. No secrets used. Caching off, including `setup-node`'s automatic package-manager cache (`package-manager-cache: false`), to avoid cache poisoning.
+- **Only GitHub-authored actions**, each pinned to a full commit SHA. Each was checked by cloning the release tag and confirming that HEAD equals the pinned SHA, and by reading its `action.yml`:
+  - `actions/checkout` v7.0.1 → `3d3c42e5aac5ba805825da76410c181273ba90b1` (`persist-credentials: false`, so the token isn't left in the checkout)
+  - `actions/setup-python` v7.1.0 → `6d4fd22b20465ccc0f7354476588e8df7c9ca0e0`
+  - `actions/setup-node` v7.1.0 → `949feb2413d6458794dcd2491c4babbbce0c15c1`
+  - All three run on `node24`.
+- **No third-party actions.**
+  - pnpm comes from Corepack, which is bundled with Node 24 and enforces the `packageManager` integrity hash.
+  - uv comes from PyPI with a hash check.
+  - This keeps the CI supply chain to GitHub's own actions plus hash-verified downloads (lesson from CVE-2026-33634).
+- No `${{ }}` expressions inside `run:` commands (no injection path). Versions come from `.python-version` and `.node-version`.
+
+### Validation (local, no GitHub run yet)
+| Check | Result |
+|---|---|
+| YAML parse (Ruby Psych) | Valid after one fix: the `pip install … --only-binary=:all: …` line needed quoting (`: ` inside a plain YAML value) |
+| Every `uses:` pinned to a 40-character SHA with a version comment | Yes |
+| Python job dry run (fresh tree copy, fresh venv, hash-pinned uv) | All steps passed |
+| Web job dry run (fresh copy, Corepack-provided pnpm 10.28.0, frozen lockfile) | All steps passed |
+| Corepack with a deliberately wrong hash | Refused ("Mismatch hashes"); the computed real hash equals the pinned one |
+| pip with a deliberately wrong uv hash | Refused; the computed real hash equals the pinned one |
+
+- The first real CI run happens when the commits are pushed (held until Step 6). Its result is recorded then.
+- Trivy security scanning is Step 5.
+
+### Cost
+- $0. GitHub Actions is free on standard runners for public repositories.

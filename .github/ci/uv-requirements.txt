@@ -1,0 +1,4 @@
+# .github/ci/uv-requirements.txt
+# HASH-PINNED uv FOR CI (MATCHES pyproject.toml [tool.uv] required-version). INSTALLED WITH --require-hashes.
+# HASH SOURCE: PYPI JSON API FOR uv 0.11.32, MANYLINUX x86_64 WHEEL (UPLOADED 2026-07-23).
+uv==0.11.32 --hash=sha256:3da76cd4e2697de30928b8a8524bd39183ac1e08cb7e72833807c022b7cba6c4
