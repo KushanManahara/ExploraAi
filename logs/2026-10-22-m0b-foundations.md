@@ -201,3 +201,35 @@ All Trivy calls use `--skip-version-check --disable-telemetry`. 🔵 Trivy sends
 
 - Hosted runners behaved as the local dry runs predicted. No fixes were needed.
 - **M0b is complete.**
+
+## GitHub security settings (plan §10.2, D30)
+Availability check through the GitHub API (2026-10-22):
+
+| Setting | State | Who |
+|---|---|---|
+| Secret scanning | 🔵 **Enabled** | Done |
+| Push protection | 🔵 **Enabled** (free for this public repo) | Done |
+| Private vulnerability reporting | Disabled | Owner: Settings → Advanced Security → Private vulnerability reporting → **Enable** |
+| Dependabot alerts | Not readable from this session | Owner: Settings → Advanced Security → Dependabot alerts → **Enable** (keep automatic security-update PRs off for now) |
+| Rulesets / branch protection on `master` | None | Owner: Settings → Rules → Rulesets → New branch ruleset (details below) |
+| Actions permissions | Not readable from this session | Owner: Settings → Actions → General (details below) |
+
+- This session's proxy blocks **writes** to repository settings (HTTP 403 on private vulnerability reporting and rulesets), so the remaining items must be clicked by the owner. Nothing was changed.
+- All remaining items are free on GitHub Free for public repositories. None need payment.
+
+**Ruleset for the default branch (`master`):**
+- Target: default branch. Enforcement: Active.
+- Rules:
+  - Restrict deletions.
+  - Block force pushes.
+  - Require a pull request before merging, with 0 approvals.
+  - Require status checks to pass, all from GitHub Actions: `Python (ruff, mypy, pytest)`, `Web (eslint, tsc, prettier, vitest, build)`, `Security (Trivy)`.
+- Leave "require linear history" and "require signed commits" off.
+
+**Actions → General:**
+- Allow GitHub-created actions only. No third-party actions are used, so no allow-list is needed.
+- Turn on "Require actions to be pinned to a full-length commit SHA".
+- Workflow permissions: read repository contents and packages.
+- Keep "Allow GitHub Actions to create and approve pull requests" off.
+- Fork pull request workflows: "Require approval for all external contributors".
+

@@ -14,7 +14,7 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - No cloud resources, DNS changes, GitHub setting changes or spending.
 
 ## Next
-1. GitHub security settings (approved after an availability check; unavailable or paid items go to the owner first).
+1. GitHub security settings: secret scanning + push protection already on. Remaining items must be clicked by the owner (this session's proxy blocks settings writes); checklist in `logs/2026-10-22-m0b-foundations.md` ("GitHub security settings").
 2. "Before M1": accounts, subscriptions, DNS records (each needs approval).
 
 ## Confirmed decisions
@@ -41,7 +41,8 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Before 2026-12-14: migrate the design system in Claude, export the project zip, and save any chats you need.
 
 ## Rules for future sessions
-- Plain English. Plan before code. Explicit approval for commits, pushes, settings, resources, DNS and spending.
+- Plain English. Plan before code.
+- **Working rule (owner, 2026-10-22): don't ask for routine steps** (commits, pushes, local checks, docs updates). Go ahead and report. **Ask only for owner decisions:** anything that costs money, deployments or new cloud resources, DNS or external account/settings changes, architecture changes, and plan or security exceptions.
 - Git writes only from the main session. Re-verify every delegated result.
 - Never commit secrets or private operational values.
 - Pin GitHub Actions to commit SHAs. Install Trivy only from a verified release (🔵 CVE-2026-33634; avoid v0.69.4–0.69.6).
