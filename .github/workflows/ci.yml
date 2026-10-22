@@ -4,7 +4,7 @@
 #   - READ-ONLY TOKEN, NO SECRETS, NO CACHES (AVOIDS CACHE POISONING).
 #   - ONLY GITHUB-AUTHORED ACTIONS, EACH PINNED TO A FULL COMMIT SHA (VERIFIED AGAINST ITS RELEASE TAG).
 #   - PNPM COMES FROM COREPACK (VERIFIES THE packageManager INTEGRITY HASH); UV IS HASH-PINNED FROM PYPI.
-# SECURITY SCANNING (TRIVY) IS ADDED IN M0B STEP 5.
+# SECURITY SCANNING: TRIVY FROM A VERIFIED RELEASE (SEE THE "security" JOB).
 
 name: CI
 
@@ -95,3 +95,45 @@ jobs:
 
       - name: Next.js production build
         run: pnpm build
+
+  security:
+    name: Security (Trivy)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      # TRIVY v0.76.0, CHOSEN OVER v0.76.1 (RELEASED 2026-10-21, DEPENDENCY BUMPS ONLY) FOR A LONGER PUBLIC SOAK TIME.
+      # THE SHA-256 IS OF THE EXACT TARBALL VERIFIED WITH COSIGN AGAINST ITS SIGSTORE BUNDLE ON 2026-10-22
+      # (SIGNER: aquasecurity/trivy reusable-release.yaml @ refs/tags/v0.76.0). NEVER USE v0.69.4-v0.69.6 (CVE-2026-33634).
+      TRIVY_VERSION: "0.76.0"
+      TRIVY_SHA256: "e24b1c51293c1b15e4ba8d45bbc7891ba053f90278ec2698f3562c993e145fe7"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Trivy (pinned release, SHA-256 verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o trivy.tar.gz "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          echo "${TRIVY_SHA256}  trivy.tar.gz" | sha256sum --check --strict -
+          tar -xzf trivy.tar.gz trivy
+          "$RUNNER_TEMP/trivy" --version
+
+      - name: Scan new code (vulnerabilities incl. dev dependencies, misconfigurations; blocking on HIGH/CRITICAL)
+        run: >-
+          "$RUNNER_TEMP/trivy" fs --skip-version-check --disable-telemetry --no-progress
+          --scanners vuln,misconfig --include-dev-deps --severity HIGH,CRITICAL
+          --skip-dirs legacy --skip-dirs design
+          --ignorefile .trivyignore.yaml --exit-code 1 .
+
+      - name: Secret scan (entire repository incl. docs, tests and .env.example; blocking)
+        run: >-
+          "$RUNNER_TEMP/trivy" fs --skip-version-check --disable-telemetry --no-progress
+          --scanners secret --secret-config trivy-secret.yaml --exit-code 1 .
+
+      - name: Scan legacy/ (report-only, never blocks; plan decision D31)
+        run: >-
+          "$RUNNER_TEMP/trivy" fs --skip-version-check --disable-telemetry --no-progress
+          --scanners vuln --severity HIGH,CRITICAL --exit-code 0 legacy

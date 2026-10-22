@@ -1,0 +1,13 @@
+# .trivyignore.yaml
+# TRIVY EXCEPTIONS. EVERY ENTRY MUST BE NARROWLY SCOPED (EXACT PACKAGE), JUSTIFIED, AND EXPIRE.
+# WHEN AN ENTRY EXPIRES, THE FINDING BLOCKS CI AGAIN AND MUST BE RE-REVIEWED. SEE logs/2026-10-22-m0b-foundations.md (STEP 5).
+vulnerabilities:
+  - id: CVE-2026-93687
+    purls:
+      - "pkg:npm/braces@3.0.3"
+    expired_at: 2026-11-22
+    statement: >-
+      Development-only dependency (eslint-config-next > @next/eslint-plugin-next > fast-glob >
+      micromatch > braces); not part of the production app. The denial of service needs
+      attacker-controlled, deeply nested brace patterns; ESLint only expands patterns from our own
+      config. No fixed version is available yet. Re-check before the expiry date.

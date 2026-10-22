@@ -116,3 +116,55 @@ Milestone M0b (plan §10.1), run one step at a time with owner approval before e
 
 ### Cost
 - $0. GitHub Actions is free on standard runners for public repositories.
+
+## Step 5 — Trivy security scanning (this step)
+
+### Scanner selection and verification
+- 🔵 Latest release: **v0.76.1** (2026-10-21). The malicious v0.69.4–v0.69.6 tags no longer exist in the repository.
+- **Chosen: v0.76.0** (released 2026-10-14). v0.76.1 only backports dependency bumps (AWS, Docker and common groups) and has no changes to Trivy itself, so the older release gives 8 days of public soak time.
+- Verification of the v0.76.0 Linux x64 tarball:
+  1. SHA-256 `e24b1c51293c1b15e4ba8d45bbc7891ba053f90278ec2698f3562c993e145fe7` matches the release `checksums.txt`.
+  2. **Sigstore signature verified with cosign v3.1.4** (cosign binary checked against its own release checksums).
+     - Identity required: `^https://github.com/aquasecurity/trivy/.github/workflows/[^@]+@refs/tags/v0.76.0$`
+     - Issuer required: `https://token.actions.githubusercontent.com`
+     - Result: "Verified OK", with a Rekor transparency-log entry.
+     - v0.76.1 was verified the same way (signer `reusable-release.yaml@refs/tags/v0.76.1`).
+- CI downloads the tarball and checks it against the **pinned SHA-256** of that verified file, so it gets exactly these bytes or fails.
+
+### CI `security` job (no secrets, read-only token)
+1. Install Trivy (pinned version and SHA-256, `sha256sum --check --strict`).
+2. **New code, blocking:**
+   - Vulnerabilities, **including dev dependencies** (the CI runs those tools), plus misconfigurations.
+   - Fails on HIGH or CRITICAL. Skips `legacy/` and `design/`. Uses `.trivyignore.yaml`.
+3. **Secret scan of the entire repository, blocking:** includes `legacy/` and `design/`, and uses `trivy-secret.yaml` (see below).
+4. **`legacy/`, report-only** (D31): HIGH and CRITICAL listed, never blocks.
+
+All Trivy calls use `--skip-version-check --disable-telemetry`. 🔵 Trivy sends anonymous usage data to Aqua unless telemetry is disabled.
+
+### Finding and exception (for owner review)
+- 🔵 **CVE-2026-93687**, `braces` 3.0.3, HIGH (CVSS 7.5): denial of service from deeply nested brace patterns. Published 2026-09-18. **No fixed version.**
+- Path: dev-only, `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` → `micromatch` → `braces`. Not in the production app.
+- The patterns come from our own lint config, so the realistic risk is low.
+- Handled with a **narrow, expiring exception** in `.trivyignore.yaml`: this CVE, purl `pkg:npm/braces@3.0.3` only, `expired_at: 2026-11-22`, with a written justification. Dev dependencies stay blocking for any other finding.
+- Tested: with the exception file removed, the gate fails. With an expiry date in the past, the gate fails.
+
+### Secret-scan gap found and fixed
+- Planting fake GitHub tokens showed that Trivy's **built-in allow rules skip** Markdown files, test files, `examples` paths and `.env.example` files. Those are exactly where this public repo is most likely to leak a key: the docs and logs, the tests and the templates.
+- `trivy-secret.yaml` turns off the `markdown`, `tests` and `examples` allow rules. Rule IDs were read from Trivy v0.76.0 source (`pkg/fanal/secret/builtin-allow-rules.go`).
+- Probe: before the fix, 3 of 14 planted tokens were detected; after, **14 of 14**.
+- The strict scan of the real repository reports **no secrets and no false positives**.
+
+### Validation
+| Check | Result |
+|---|---|
+| YAML parse; all `uses:` pinned to SHAs | Valid; yes |
+| Security job from a **cold cache** (fresh tree copy, steps run one shell each, as on GitHub) | All 4 steps pass, including the vulnerability-DB download |
+| New-code scan | 0 HIGH/CRITICAL (1 suppressed by the documented exception) |
+| Whole-repo strict secret scan | 0 findings |
+| `legacy/` report | 108 HIGH/CRITICAL (6 CRITICAL) across 18 packages, shown and not blocking |
+| Negative: exception removed | Gate fails (exit 1) |
+| Negative: fake tokens in `docs/implementation-plan.md` and `apps/api/.env.example` | Secret gate fails (exit 1), both files reported |
+| Misconfiguration scanner | No supported config files yet (no Dockerfile or IaC). Trivy doesn't analyse GitHub workflow files. |
+
+### Cost
+- $0. Trivy and its vulnerability database are free. No external resources, settings or services changed.
