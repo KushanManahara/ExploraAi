@@ -1,17 +1,52 @@
 # pyproject.toml
 # UV WORKSPACE ROOT (VIRTUAL: NOT A PACKAGE ITSELF). MEMBERS ARE THE SHARED CORE, THE API AND THE WORKER.
 
+[tool.uv]
+# PIN THE PACKAGE MANAGER SO EVERY MACHINE AND CI RESOLVES THE SAME WAY.
+required-version = ">=0.11.32,<0.12"
+
 [tool.uv.workspace]
 members = ["packages/core", "apps/api", "apps/worker"]
 
 [dependency-groups]
-# TEST-ONLY TOOLS. LINTERS AND TYPE CHECKERS ARRIVE IN M0B STEP 3.
+# DEVELOPMENT TOOLS: TESTS, LINT/FORMAT (RUFF) AND STRICT TYPE CHECKS (MYPY).
 dev = [
     "pytest==9.1.1",
+    # NOTE: STARLETTE WARNS THAT httpx IS DEPRECATED FOR ITS TESTCLIENT IN FAVOUR OF httpx2.
+    # KEPT BY OWNER DECISION; SEE logs/2026-10-22-m0b-foundations.md.
     "httpx==0.28.1",
+    "ruff==0.17.1",
+    "mypy==2.4.0",
 ]
 
 [tool.pytest.ini_options]
 # IMPORTLIB MODE LETS EACH PACKAGE KEEP A test_health.py WITHOUT NAME CLASHES.
 addopts = "--import-mode=importlib"
 testpaths = ["packages/core/tests", "apps/api/tests", "apps/worker/tests"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+# FROZEN OR PRESERVED CONTENT IS NEVER LINTED OR REFORMATTED.
+extend-exclude = ["legacy", "design"]
+
+[tool.ruff.lint]
+# PYFLAKES, PYCODESTYLE, IMPORT ORDER, PYUPGRADE, BUGBEAR, SIMPLIFY, BANDIT SECURITY CHECKS, RUFF RULES.
+select = ["F", "E", "W", "I", "UP", "B", "SIM", "S", "RUF"]
+
+[tool.ruff.lint.isort]
+# OUR OWN PACKAGES SORT AFTER THIRD-PARTY IMPORTS.
+known-first-party = ["exploraai_core", "exploraai_api", "exploraai_worker"]
+
+[tool.ruff.lint.per-file-ignores]
+# PLAIN assert IS THE NORMAL WAY TO WRITE PYTEST CHECKS.
+"**/tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["packages/core", "apps/api", "apps/worker"]
+exclude = ["^legacy/", "^design/"]
+# MAP FILES BY PATH SO EACH PACKAGE CAN KEEP ITS OWN tests/test_health.py.
+explicit_package_bases = true
+mypy_path = ["packages/core/src", "apps/api/src", "apps/worker/src"]

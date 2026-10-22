@@ -1,0 +1,9 @@
+# apps/web/.prettierignore
+# GENERATED FILES ARE NOT FORMATTED.
+.next/
+out/
+coverage/
+node_modules/
+next-env.d.ts
+# NEXT.JS REWRITES tsconfig.json IN ITS OWN STYLE ON EVERY BUILD, SO NEXT.JS OWNS ITS FORMATTING.
+tsconfig.json

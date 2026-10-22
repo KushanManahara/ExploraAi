@@ -1,5 +1,45 @@
+# .gitignore
+# ROOT IGNORE RULES FOR THE MONOREPO. THE ORIGINAL PROTOTYPE RULES ARE PRESERVED IN legacy/.gitignore.
+
+# SECRETS: NEVER COMMIT REAL ENVIRONMENT FILES. ONLY *.env.example (VARIABLE NAMES, NO VALUES) IS TRACKED.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# PYTHON
+.venv/
+venv/
 /venv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# NODE / NEXT.JS
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+.pnpm-store/
+npm-debug.log*
+pnpm-debug.log*
+
+# LOCAL TOOLING AND OS FILES
+.vercel/
+.DS_Store
+Thumbs.db
+*.log
+
+# LEGACY PROTOTYPE LOCAL FILES (KEPT FROM THE ORIGINAL ROOT RULES)
 sample.jpeg
 tomato (2).pdf
-.env
-__pycache__/

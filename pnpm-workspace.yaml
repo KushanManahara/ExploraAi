@@ -2,3 +2,12 @@
 # JAVASCRIPT WORKSPACE. ONLY THE WEB APP FOR NOW.
 packages:
   - "apps/web"
+
+# ESLINT 9 IS END OF LIFE (2026-08-06), SO WE USE ESLINT 10. THESE THREE PLUGINS STILL DECLARE A PEER
+# RANGE THAT STOPS AT ESLINT 9, BUT THEIR RULES WERE TESTED WORKING ON ESLINT 10 (M0B STEP 3 LOG).
+# THE EXCEPTION IS SCOPED TO THESE PLUGINS ONLY. REMOVE IT ONCE THEY DECLARE ESLINT 10 SUPPORT.
+peerDependencyRules:
+  allowedVersions:
+    "eslint-plugin-react>eslint": "10"
+    "eslint-plugin-import>eslint": "10"
+    "eslint-plugin-jsx-a11y>eslint": "10"
