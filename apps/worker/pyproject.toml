@@ -1,0 +1,21 @@
+# apps/worker/pyproject.toml
+# BACKGROUND WORKER. SKELETON ONLY: A HEALTH CHECK ENTRY POINT, NO JOB PROCESSING YET.
+
+[project]
+name = "exploraai-worker"
+version = "0.1.0"
+description = "ExploraAi background worker."
+requires-python = ">=3.14"
+dependencies = [
+    "exploraai-core",
+]
+
+[project.scripts]
+exploraai-worker = "exploraai_worker.__main__:main"
+
+[tool.uv.sources]
+exploraai-core = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14"]
+build-backend = "uv_build"

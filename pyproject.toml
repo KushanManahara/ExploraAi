@@ -1,0 +1,17 @@
+# pyproject.toml
+# UV WORKSPACE ROOT (VIRTUAL: NOT A PACKAGE ITSELF). MEMBERS ARE THE SHARED CORE, THE API AND THE WORKER.
+
+[tool.uv.workspace]
+members = ["packages/core", "apps/api", "apps/worker"]
+
+[dependency-groups]
+# TEST-ONLY TOOLS. LINTERS AND TYPE CHECKERS ARRIVE IN M0B STEP 3.
+dev = [
+    "pytest==9.1.1",
+    "httpx==0.28.1",
+]
+
+[tool.pytest.ini_options]
+# IMPORTLIB MODE LETS EACH PACKAGE KEEP A test_health.py WITHOUT NAME CLASHES.
+addopts = "--import-mode=importlib"
+testpaths = ["packages/core/tests", "apps/api/tests", "apps/worker/tests"]

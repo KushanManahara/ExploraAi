@@ -1,0 +1,20 @@
+# apps/api/pyproject.toml
+# FASTAPI SERVICE. SKELETON ONLY: A HEALTH ENDPOINT, NO PRODUCT FEATURES YET.
+
+[project]
+name = "exploraai-api"
+version = "0.1.0"
+description = "ExploraAi HTTP API."
+requires-python = ">=3.14"
+dependencies = [
+    "exploraai-core",
+    "fastapi==0.159.1",
+    "uvicorn==0.54.0",
+]
+
+[tool.uv.sources]
+exploraai-core = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14"]
+build-backend = "uv_build"
