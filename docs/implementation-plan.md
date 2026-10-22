@@ -41,11 +41,11 @@ Browser ──► Next.js web app (Vercel, functions in Frankfurt)
    │             │
    │             └──► Supabase Auth (Google sign-in; email links when D26 allows)
    ▼
-FastAPI API (Render, Frankfurt) ──► Supabase (Frankfurt): Postgres + pgvector,
+FastAPI API (free host, Frankfurt — D34) ──► Supabase (Frankfurt): Postgres + pgvector,
    │                                Storage (private), Queues (pgmq)
    ├──► Gemini API (paid tier)      answers, embeddings
    └──► Tavily (optional)           web search, query text only
-Python worker (Render, Frankfurt) ──► reads jobs, processes PDFs
+Python worker (free host, Frankfurt — D34) ──► reads jobs, processes PDFs
 ```
 
 🟢 **Region:** Frankfurt for the database, API and worker (same region, private networking).
@@ -180,15 +180,18 @@ Python worker (Render, Frankfurt) ──► reads jobs, processes PDFs
 
 ## 7. Hosting and accounts
 
-🟢 Vercel, Render and Supabase are preferred. Commercial use is not assumed. Nothing is created or paid for without approval.
+🟢 **D33 (2026-10-22): free options only.** Every infrastructure service uses a free plan. The only accepted cost is the Gemini API (still capped, §5). Commercial use is not assumed. Nothing paid is created without a new owner decision.
 
-| | Beta (non-commercial) | Before any commercial use |
+| | Beta (free only, D33) | Before any commercial use (needs a new decision) |
 |---|---|---|
 | Web | Vercel Hobby, $0 (🔵 non-commercial only) | Vercel Pro, $20/seat |
-| API + worker | 2 × Render Starter, $7 each | Render Pro workspace $25 + compute |
-| Data | Supabase Pro, $25 (🔵 Free pauses after 1 week, no backups) | Same |
-| Email | Resend Free, $0 | Resend or AWS SES |
-| **Total infrastructure** | **~$39/month** | ~$84–169/month |
+| API + worker | Free web service (🔴 host to be chosen; see `logs/2026-10-22-m1-cloud.md`) | Paid always-on instances |
+| Data | Supabase Free, $0 (🔵 pauses after 1 week without activity, no automatic backups, 500 MB database, 1 GB storage) | Supabase Pro, $25 |
+| Email | Resend Free, $0 (only if D26 allows) | Resend or AWS SES |
+| AI | Gemini API, pay as you go, capped (§5) | Same |
+| **Total infrastructure** | **$0/month** (Gemini usage only) | ~$84–169/month |
+
+🟠 Free-plan trade-offs accepted for the beta: cold starts, a paused database after a quiet week, and no automatic backups. Mitigation: a manual schema-and-data export before risky changes, and the queue's durable job records so work survives restarts.
 
 🟢 Owner-controlled accounts for the beta, with 2FA, scoped keys, spend caps where available, and no autoscaling. Details are in the private notes.
 
@@ -326,9 +329,11 @@ Out of scope for M0b: GitHub settings (separate GH step), cloud resources, DNS, 
 - **M0b** approved, run one step at a time. Changes are reported, and approval is waited for, before every commit and every push.
 - **P0** fully approved (2026-10-22); the preserved design assets are unchanged.
 - **Minor defaults:** new app components are considered for the design system after M8; manual retries of failed jobs don't use upload quota.
-- **Launch defaults:** Render for the API; polling for job status; Tailwind; no production prompt tracing; no dark mode at launch; a new Supabase project; Flash-Lite as the default answer model; web search on by default with a clear notice; at most 10 papers per question and 5 per comparison.
+- **D33 — free options only (2026-10-22):** every infrastructure service on a free plan; Gemini API cost (capped) is the only accepted cost. Hosted Supabase project created on the Free plan in Frankfurt.
+- **Working rule (2026-10-22):** routine steps (commits, pushes, checks, docs) go ahead without asking; only owner decisions (cost, deployment, architecture, external settings, exceptions) wait for approval. This replaces the step-by-step approval rule for M0b.
+- **Launch defaults:** API host to be re-chosen under D33; polling for job status; Tailwind; no production prompt tracing; no dark mode at launch; a new Supabase project; Flash-Lite as the default answer model; web search on by default with a clear notice; at most 10 papers per question and 5 per comparison.
 
-**Open (🔴):** no owner decisions are open. Each next step still needs its own approval (§10).
+**Open (🔴):** D34 — free host and shape for the API and worker (see `logs/2026-10-22-m1-cloud.md`).
 
 **Owner actions (not decisions):** migrate the design system in Claude and export the project zip before 2026-12-14 (§8). Save the private operations notes.
 

@@ -20,7 +20,7 @@ No cloud resources were created and nothing was spent.
   - S3 protocol, vector buckets, edge runtime and analytics off.
   - It contains only `env(...)` references, no secret values.
 - `supabase/.gitignore` (new, from `supabase init`).
-- `supabase/migrations/20261022000100_initial_schema.sql`, the full data model from plan §3:
+- `supabase/migrations/20261022034820_initial_schema.sql` (renamed from `20261022000100_…` to match the hosted project; see `logs/2026-10-22-m1-cloud.md`), the full data model from plan §3:
   - **Tables:** `profiles`, `papers`, `processing_jobs`, `paper_pages`, `chunks` (`halfvec(768)` + HNSW cosine index, generated `tsvector` + GIN index, embedding model stored per chunk), `paper_profiles`, `conversations`, `conversation_papers`, `messages`, `citations`, `comparisons`, `usage_counters`, `ai_cost_ledger`, `provider_prices`, `app_settings`.
   - **Constraints from the plan:** PDF ≤ 20 MB, ≤ 100 pages, paper status values, 2–5 papers per comparison, citation label format, web citations need a URL, `(user_id, sha256)` unique, `(paper_id, kind, generation)` unique for job idempotency.
   - **Triggers:** automatic profile on sign-up; `updated_at`; **on paper delete, citations are marked `unavailable` and their snippet cleared**. Foreign keys then null the paper and chunk links, and messages stay.

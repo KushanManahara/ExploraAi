@@ -1,4 +1,4 @@
--- supabase/migrations/20261022000100_initial_schema.sql
+-- supabase/migrations/20261022034820_initial_schema.sql
 -- INITIAL SCHEMA (PLAN §3). SECURITY MODEL:
 --   - ROW LEVEL SECURITY ON EVERY TABLE.
 --   - SIGNED-IN USERS MAY ONLY *READ* THEIR OWN ROWS THROUGH THE DATA API.

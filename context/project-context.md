@@ -12,14 +12,18 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - M1 local part done 2026-10-22: full schema migration, RLS (read-own-rows only; writes via API/worker), 24 pgTAP isolation tests passing, pgmq 1.5.1 confirmed locally, database CI job. Record: `logs/2026-10-22-m1-local-database.md`.
 - Tool versions in use: TypeScript 6.0.3 (typescript-eslint limit), ESLint 10, pnpm 10.28.0, Trivy v0.76.0.
 - Open review items: `httpx` deprecation warning (kept by owner decision); `braces` CVE-2026-93687 exception expires 2026-11-22.
-- No cloud resources, DNS changes, GitHub setting changes or spending.
+- M1 cloud part started 2026-10-22: hosted Supabase project on the **Free** plan in Frankfurt; schema applied; pgmq 1.5.1 confirmed there; advisor warnings fixed (26/26 tests). Local migration files renamed to the hosted versions. Record: `logs/2026-10-22-m1-cloud.md`.
+- No DNS changes, GitHub setting changes or spending.
 
 ## Next
 1. GitHub security settings: secret scanning + push protection already on. Remaining items must be clicked by the owner (this session's proxy blocks settings writes); checklist in `logs/2026-10-22-m0b-foundations.md` ("GitHub security settings").
-2. M1 cloud part (owner decision on cost): create the hosted Supabase project (Frankfurt), apply the migration, Google sign-in, API JWT check, brand options.
+2. 🔴 D34: choose the free host for the API + worker (options in `logs/2026-10-22-m1-cloud.md`; recommended: one Render Free service with an in-process worker).
+3. Google sign-in: owner creates a Google OAuth client; then Supabase Auth settings.
+4. API JWT check (JWKS) and brand options.
 
 ## Confirmed decisions
 - Clean rebuild. Prototype kept unchanged in `legacy/` until the owner approves removal.
+- **D33: free options only.** All infrastructure on free plans; Gemini API cost (capped) is the only accepted cost. Supabase Free trade-offs accepted (pauses after a quiet week, no backups, 500 MB DB, 1 GB storage).
 - Frankfurt for the database, API and worker. Vercel functions in `fra1`.
 - AI cost caps (monthly, daily, per user) enforced server-side and fail-closed. Infrastructure costs separate. Values are private.
 - Quotas: 10 prompts / 5 web searches / 3 uploads / 3 comparisons per user per day, reset 00:00 UTC.
@@ -32,10 +36,10 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Licence: MIT for original project code only, `Copyright (c) 2024-2026 Kushan Manahara`. Branding, portfolio text, screenshots and third-party assets are excluded; fonts keep their own licences. Added in M0b (D28).
 - Private notes kept by the owner outside the repo (D32).
 - Minor defaults approved: components considered for the design system after M8; manual retries don't use upload quota.
-- Launch defaults approved: Render API, polling, Tailwind, no production prompt tracing, no dark mode, new Supabase project, Flash-Lite, web search on with notice, 10 papers per question / 5 per comparison.
+- Launch defaults approved: API host re-chosen under D33 (D34 open), polling, Tailwind, no production prompt tracing, no dark mode, new Supabase project, Flash-Lite, web search on with notice, 10 papers per question / 5 per comparison.
 
 ## Open
-- No owner decisions open. Every next step needs its own approval.
+- D34: free host and shape for the API + worker.
 - Never access or modify the existing Resend setup on the owner's domain.
 
 ## Owner actions with deadlines

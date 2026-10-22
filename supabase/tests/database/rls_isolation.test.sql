@@ -5,7 +5,7 @@
 
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(24);
+select plan(26);
 
 -- FIXTURES (AS THE DATABASE OWNER, WHICH BYPASSES RLS) ----------------------------------------------
 insert into auth.users (id, email) values
@@ -85,6 +85,12 @@ select throws_ok(
   $$select * from public.provider_prices$$,
   '42501', null, 'A cannot read provider prices');
 select is((select count(*)::int from storage.objects), 0, 'A has no direct access to stored files');
+select ok(not has_function_privilege('authenticated', 'public.handle_new_user()', 'execute')
+          and not has_function_privilege('authenticated', 'public.mark_citations_unavailable()', 'execute'),
+  'signed-in users cannot call the SECURITY DEFINER trigger functions through the Data API');
+select ok(not has_function_privilege('anon', 'public.handle_new_user()', 'execute')
+          and not has_function_privilege('anon', 'public.mark_citations_unavailable()', 'execute'),
+  'anonymous visitors cannot call the SECURITY DEFINER trigger functions');
 
 -- AS AN ANONYMOUS VISITOR ----------------------------------------------------------------------------
 reset role;
