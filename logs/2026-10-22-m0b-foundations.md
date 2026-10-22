@@ -168,3 +168,23 @@ All Trivy calls use `--skip-version-check --disable-telemetry`. 🔵 Trivy sends
 
 ### Cost
 - $0. Trivy and its vulnerability database are free. No external resources, settings or services changed.
+
+## Step 6 — README, security policy and licence (this step)
+
+### Changes
+- `README.md` (new root README): purpose, early-development status, repository layout, requirements, set-up and check commands (the same as CI), links to the plan, context and logs, and short security and licensing notes. No private operational details.
+- `SECURITY.md`:
+  - private reporting through GitHub's "Report a vulnerability", with a no-details fallback issue until that's enabled in the GH settings step;
+  - what to include, with no guaranteed response times (single maintainer);
+  - scope (`legacy/` frozen, not patched);
+  - a summary of the repository's protections.
+- `LICENSE`: the **standard, unmodified MIT text** with `Copyright (c) 2024-2026 Kushan Manahara`, so licence detection works.
+- `LICENSING.md`: the scope note.
+  - MIT applies only to original project code, including `legacy/`.
+  - Excluded: everything in `design/claude-design/` (personal branding, portfolio text, UI kit, screenshot).
+  - Fonts keep the **SIL Open Font License 1.1**. 🔵 Verified 2026-10-22 from `google/fonts` (`ofl/familjengrotesk`, `ofl/splinesansmono`: METADATA `license: "OFL"`, `OFL.txt` copyright lines).
+  - Third-party dependencies keep their own licences.
+- `context/project-context.md`: status updated to M0b steps 1–6, open review items, next steps.
+
+### Notes
+- The root README was missing between Step 1 and Step 6. That's why the push was held until now: published history moves from the old README straight to this one.

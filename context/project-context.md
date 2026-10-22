@@ -8,10 +8,13 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Plan v4 and the four documents approved and committed (2026-10-22).
 - P0 done: commit `bddf81f`, only `design/claude-design/` (107 files + `MANIFEST.md`), checksums verified. 🟢 Fully approved 2026-10-22. Design assets stay unchanged.
 - M0a (read-only audit) done 2026-10-22. Findings in `logs/2026-10-21-audit.md`.
+- M0b steps 1–6 done 2026-10-22 (legacy move, skeleton, tooling, CI, Trivy, README/SECURITY/LICENSE). Record: `logs/2026-10-22-m0b-foundations.md`. The first real GitHub CI run happens at the push.
+- Tool versions in use: TypeScript 6.0.3 (typescript-eslint limit), ESLint 10, pnpm 10.28.0, Trivy v0.76.0.
+- Open review items: `httpx` deprecation warning (kept by owner decision); `braces` CVE-2026-93687 exception expires 2026-11-22.
 - No cloud resources, DNS changes, GitHub setting changes or spending.
 
 ## Next
-1. M0b foundations (approved), **one step at a time, with approval before each commit and push**.
+1. Push M0b (owner approval), then confirm the first CI run is green.
 2. GitHub security settings (approved after an availability check; unavailable or paid items go to the owner first).
 3. "Before M1": accounts, subscriptions, DNS records (each needs approval).
 
@@ -44,4 +47,5 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Never commit secrets or private operational values.
 - Pin GitHub Actions to commit SHAs. Install Trivy only from a verified release (🔵 CVE-2026-33634; avoid v0.69.4–0.69.6).
 - Versions: Node.js 24 LTS, Python 3.14.
+- Re-check before 2026-11-22 whether `braces` has a fix (Trivy exception expires then and CI will block).
 - Mark facts, decisions, assumptions and open questions clearly.
