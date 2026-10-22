@@ -13,13 +13,14 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Tool versions in use: TypeScript 6.0.3 (typescript-eslint limit), ESLint 10, pnpm 10.28.0, Trivy v0.76.0.
 - Open review items: `httpx` deprecation warning (kept by owner decision); `braces` CVE-2026-93687 exception expires 2026-11-22.
 - M1 cloud part started 2026-10-22: hosted Supabase project on the **Free** plan in Frankfurt; schema applied; pgmq 1.5.1 confirmed there; advisor warnings fixed (26/26 tests). Local migration files renamed to the hosted versions. Record: `logs/2026-10-22-m1-cloud.md`.
+- API sign-in check done 2026-10-22: Supabase JWTs verified against the project's public keys (ES256), fail-closed; `GET /me` protected. Record: `logs/2026-10-22-m1-cloud.md`.
 - No DNS changes, GitHub setting changes or spending.
 
 ## Next
 1. GitHub security settings: secret scanning + push protection already on. Remaining items must be clicked by the owner (this session's proxy blocks settings writes); checklist in `logs/2026-10-22-m0b-foundations.md` ("GitHub security settings").
-2. 🔴 D34: choose the free host for the API + worker (options in `logs/2026-10-22-m1-cloud.md`; recommended: one Render Free service with an in-process worker).
-3. Google sign-in: owner creates a Google OAuth client; then Supabase Auth settings.
-4. API JWT check (JWKS) and brand options.
+2. Google sign-in: owner creates a Google OAuth client; then Supabase Auth settings.
+3. Brand options for review (last M1 item).
+4. M2: upload + processing, with the worker running inside the API service (D34).
 
 ## Confirmed decisions
 - Clean rebuild. Prototype kept unchanged in `legacy/` until the owner approves removal.
@@ -36,10 +37,11 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Licence: MIT for original project code only, `Copyright (c) 2024-2026 Kushan Manahara`. Branding, portfolio text, screenshots and third-party assets are excluded; fonts keep their own licences. Added in M0b (D28).
 - Private notes kept by the owner outside the repo (D32).
 - Minor defaults approved: components considered for the design system after M8; manual retries don't use upload quota.
-- Launch defaults approved: API host re-chosen under D33 (D34 open), polling, Tailwind, no production prompt tracing, no dark mode, new Supabase project, Flash-Lite, web search on with notice, 10 papers per question / 5 per comparison.
+- **D34:** API + worker on one Render Free web service (Frankfurt), worker as an in-process background loop.
+- Launch defaults approved: polling, Tailwind, no production prompt tracing, no dark mode, new Supabase project, Flash-Lite, web search on with notice, 10 papers per question / 5 per comparison.
 
 ## Open
-- D34: free host and shape for the API + worker.
+- No owner decisions open.
 - Never access or modify the existing Resend setup on the owner's domain.
 
 ## Owner actions with deadlines

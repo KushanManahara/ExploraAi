@@ -41,11 +41,11 @@ Browser ──► Next.js web app (Vercel, functions in Frankfurt)
    │             │
    │             └──► Supabase Auth (Google sign-in; email links when D26 allows)
    ▼
-FastAPI API (free host, Frankfurt — D34) ──► Supabase (Frankfurt): Postgres + pgvector,
+FastAPI API (Render Free, Frankfurt — D34) ──► Supabase (Frankfurt): Postgres + pgvector,
    │                                Storage (private), Queues (pgmq)
    ├──► Gemini API (paid tier)      answers, embeddings
    └──► Tavily (optional)           web search, query text only
-Python worker (free host, Frankfurt — D34) ──► reads jobs, processes PDFs
+Python worker (inside the API service — D34) ──► reads jobs, processes PDFs
 ```
 
 🟢 **Region:** Frankfurt for the database, API and worker (same region, private networking).
@@ -185,7 +185,7 @@ Python worker (free host, Frankfurt — D34) ──► reads jobs, processes PDF
 | | Beta (free only, D33) | Before any commercial use (needs a new decision) |
 |---|---|---|
 | Web | Vercel Hobby, $0 (🔵 non-commercial only) | Vercel Pro, $20/seat |
-| API + worker | Free web service (🔴 host to be chosen; see `logs/2026-10-22-m1-cloud.md`) | Paid always-on instances |
+| API + worker | Render Free, one web service in Frankfurt: the API with the worker running inside it (D34), $0 | Separate paid always-on instances |
 | Data | Supabase Free, $0 (🔵 pauses after 1 week without activity, no automatic backups, 500 MB database, 1 GB storage) | Supabase Pro, $25 |
 | Email | Resend Free, $0 (only if D26 allows) | Resend or AWS SES |
 | AI | Gemini API, pay as you go, capped (§5) | Same |
@@ -331,9 +331,10 @@ Out of scope for M0b: GitHub settings (separate GH step), cloud resources, DNS, 
 - **Minor defaults:** new app components are considered for the design system after M8; manual retries of failed jobs don't use upload quota.
 - **D33 — free options only (2026-10-22):** every infrastructure service on a free plan; Gemini API cost (capped) is the only accepted cost. Hosted Supabase project created on the Free plan in Frankfurt.
 - **Working rule (2026-10-22):** routine steps (commits, pushes, checks, docs) go ahead without asking; only owner decisions (cost, deployment, architecture, external settings, exceptions) wait for approval. This replaces the step-by-step approval rule for M0b.
-- **Launch defaults:** API host to be re-chosen under D33; polling for job status; Tailwind; no production prompt tracing; no dark mode at launch; a new Supabase project; Flash-Lite as the default answer model; web search on by default with a clear notice; at most 10 papers per question and 5 per comparison.
+- **D34 — API + worker host (2026-10-22):** one Render Free web service in Frankfurt runs the API, with the worker as a background loop in the same process. Accepted: about a 1-minute cold start after 15 idle minutes; jobs cut off by a spin-down are retried from the queue. The API and worker stay separate packages, so splitting them later is a deployment change.
+- **Launch defaults:** Render Free for the API (D34); polling for job status; Tailwind; no production prompt tracing; no dark mode at launch; a new Supabase project; Flash-Lite as the default answer model; web search on by default with a clear notice; at most 10 papers per question and 5 per comparison.
 
-**Open (🔴):** D34 — free host and shape for the API and worker (see `logs/2026-10-22-m1-cloud.md`).
+**Open (🔴):** no owner decisions are open.
 
 **Owner actions (not decisions):** migrate the design system in Claude and export the project zip before 2026-12-14 (§8). Save the private operations notes.
 

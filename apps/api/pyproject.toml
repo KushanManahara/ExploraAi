@@ -1,5 +1,5 @@
 # apps/api/pyproject.toml
-# FASTAPI SERVICE. SKELETON ONLY: A HEALTH ENDPOINT, NO PRODUCT FEATURES YET.
+# FASTAPI SERVICE: HEALTH ENDPOINT AND SUPABASE SIGN-IN TOKEN VERIFICATION. NO PRODUCT FEATURES YET.
 
 [project]
 name = "exploraai-api"
@@ -9,6 +9,7 @@ requires-python = ">=3.14"
 dependencies = [
     "exploraai-core",
     "fastapi==0.159.1",
+    "pyjwt[crypto]==2.15.1",
     "uvicorn==0.54.0",
 ]
 
