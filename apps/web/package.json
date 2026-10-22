@@ -11,9 +11,12 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "e2e:auth": "node e2e/auth-flow.e2e.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.3",
     "next": "16.4.2",
     "react": "19.3.1",
     "react-dom": "19.3.1"
@@ -24,6 +27,7 @@
     "@types/react-dom": "19.3.0",
     "eslint": "10.13.0",
     "eslint-config-next": "16.4.2",
+    "playwright-core": "1.56.1",
     "prettier": "3.9.10",
     "typescript": "6.0.3",
     "vite": "8.3.5",

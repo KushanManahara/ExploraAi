@@ -78,6 +78,7 @@ def test_missing_token_is_rejected_with_bearer_challenge() -> None:
         pytest.param(_token(role="anon"), id="anon-role"),
         pytest.param(_token(role="service_role"), id="service-role"),
         pytest.param(_token(role=None), id="no-role"),
+        pytest.param(_token(is_anonymous=True), id="anonymous-user"),
         pytest.param(_token(sub=None), id="no-subject"),
         pytest.param(_token(sub="not-a-uuid"), id="subject-not-uuid"),
         pytest.param(_token(exp=None), id="no-expiry"),

@@ -7,6 +7,7 @@
 #     HS256 IS NEVER ACCEPTED: NO ALGORITHM-CONFUSION ATTACKS, AND THE API HOLDS NO JWT SECRET.
 #   - ISSUER, AUDIENCE ("authenticated"), EXPIRY, ISSUED-AT AND SUBJECT ARE REQUIRED AND CHECKED.
 #   - ONLY THE "authenticated" ROLE IS ALLOWED; ANON AND SERVICE-ROLE TOKENS ARE REJECTED.
+#     ANONYMOUS-USER TOKENS (is_anonymous) ARE REJECTED TOO, IN CASE ANONYMOUS SIGN-IN IS TURNED ON.
 #   - FAIL CLOSED: IF THE KEYS CAN'T BE FETCHED OR AUTH ISN'T CONFIGURED, THE REQUEST IS
 #     REFUSED (503), NEVER ALLOWED.
 #   - TOKENS ARE NEVER LOGGED.
@@ -30,8 +31,12 @@ AUDIENCE = "authenticated"
 REQUIRED_CLAIMS = ("exp", "iat", "iss", "aud", "sub")
 # SMALL ALLOWANCE FOR CLOCK DIFFERENCES BETWEEN SUPABASE AND THE API HOST.
 LEEWAY_SECONDS = 10
-# KEEP FETCHED KEYS FOR 10 MINUTES. AN UNKNOWN KEY ID TRIGGERS A REFETCH, SO ROTATION STILL WORKS.
+# KEY ROTATION: FETCHED KEYS ARE CACHED FOR 10 MINUTES. A TOKEN WITH AN UNKNOWN KEY ID FORCES ONE
+# REFETCH, BUT AT MOST ONCE PER 30 SECONDS, SO FORGED KEY IDS CAN'T FLOOD THE JWKS ENDPOINT.
+# SUPABASE PUBLISHES A NEW ("STANDBY") KEY BEFORE IT STARTS SIGNING WITH IT; WAIT AT LEAST
+# JWKS_CACHE_SECONDS AFTER ADDING A STANDBY KEY BEFORE ROTATING (logs/2026-10-22-m1-auth.md).
 JWKS_CACHE_SECONDS = 600
+JWKS_REFRESH_COOLDOWN_SECONDS = 30
 JWKS_TIMEOUT_SECONDS = 5
 
 # A KEY RESOLVER TURNS A RAW TOKEN INTO THE PUBLIC KEY THAT SHOULD HAVE SIGNED IT.
@@ -52,12 +57,15 @@ class AuthUnavailableError(Exception):
     """THE TOKEN CAN'T BE CHECKED RIGHT NOW (E.G. KEYS UNREACHABLE). MAPS TO 503 (FAIL CLOSED)."""
 
 
-def jwks_key_resolver(settings: AuthSettings) -> KeyResolver:
+def jwks_key_resolver(
+    settings: AuthSettings, refresh_cooldown_seconds: float = JWKS_REFRESH_COOLDOWN_SECONDS
+) -> KeyResolver:
     client = jwt.PyJWKClient(
         settings.jwks_url,
         cache_jwk_set=True,
         lifespan=JWKS_CACHE_SECONDS,
         timeout=JWKS_TIMEOUT_SECONDS,
+        cooldown_duration=refresh_cooldown_seconds,
     )
 
     def resolve(token: str) -> Any:
@@ -108,6 +116,8 @@ class TokenVerifier:
 
         if claims.get("role") != AUDIENCE:
             raise InvalidTokenError("role not allowed")
+        if claims.get("is_anonymous") is True:
+            raise InvalidTokenError("anonymous users not allowed")
 
         try:
             user_id = UUID(str(claims["sub"]))

@@ -1,5 +1,7 @@
 // apps/web/app/layout.tsx
-// ROOT LAYOUT. DESIGN TOKENS AND FONTS ARE WIRED IN DURING M8.
+// ROOT LAYOUT. A SMALL TOKEN SUBSET IS LOADED NOW; THE FULL DESIGN SYSTEM AND FONTS ARRIVE IN M8.
+import "./globals.css";
+
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 

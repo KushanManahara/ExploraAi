@@ -13,13 +13,14 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Tool versions in use: TypeScript 6.0.3 (typescript-eslint limit), ESLint 10, pnpm 10.28.0, Trivy v0.76.0.
 - Open review items: `httpx` deprecation warning (kept by owner decision); `braces` CVE-2026-93687 exception expires 2026-11-22.
 - M1 cloud part started 2026-10-22: hosted Supabase project on the **Free** plan in Frankfurt; schema applied; pgmq 1.5.1 confirmed there; advisor warnings fixed (26/26 tests). Local migration files renamed to the hosted versions. Record: `logs/2026-10-22-m1-cloud.md`.
+- Email + password auth done 2026-10-22 (local): sign-up with confirmation, sign-in, sign-out, password reset, HTTP-only session cookies, protected workspace; 28/28 browser checks pass. Logo options A–C prepared. Record: `logs/2026-10-22-m1-auth.md`.
 - API sign-in check done 2026-10-22: Supabase JWTs verified against the project's public keys (ES256), fail-closed; `GET /me` protected. Record: `logs/2026-10-22-m1-cloud.md`.
 - No DNS changes, GitHub setting changes or spending.
 
 ## Next
 1. GitHub security settings: secret scanning + push protection already on. Remaining items must be clicked by the owner (this session's proxy blocks settings writes); checklist in `logs/2026-10-22-m0b-foundations.md` ("GitHub security settings").
-2. Google sign-in: owner creates a Google OAuth client; then Supabase Auth settings.
-3. Brand options for review (last M1 item).
+2. 🔴 Owner decisions: D36 account email sender, D37 CAPTCHA, D38 logo (options in `design/brand-options/`).
+3. Owner setup on the hosted Supabase project (auth settings and email templates), listed in `logs/2026-10-22-m1-auth.md`.
 4. M2: upload + processing, with the worker running inside the API service (D34).
 
 ## Confirmed decisions
@@ -31,7 +32,8 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Paid Gemini only for private papers. Tavily optional, query text only.
 - Scanned PDFs → `needs_ocr`, never `ready`. OCR flag off.
 - Supabase Queues + durable job records.
-- Google sign-in first. Email links via `exploraai.gimhara.com` (D24) only with a policy-compliant, no-cost option: no extra accounts, no shared quota (D26). Resend Free preferred, no paid upgrades (D25). AWS SES only after its costs are presented and approved.
+- **D35: email + password sign-in only** (Supabase Auth). No Google OAuth, no social sign-in, no magic links, no usernames (Supabase identifies password users by email).
+- Account emails (confirm, reset, password changed) need a custom sender for public sign-up (D36, open). Approved subdomain `exploraai.gimhara.com` (D24); Resend Free preferred, no paid upgrades (D25); no extra accounts, no shared quota (D26); AWS SES only after costs are approved.
 - M0a / M0b split (D27). Public repo with sensitive details kept out (D29). GitHub settings approved, applied only after an availability check (D30). Trivy report-only on `legacy/` once verified (D31).
 - The Claude Design system is the source of truth. New ExploraAi brand (options in M1).
 - Licence: MIT for original project code only, `Copyright (c) 2024-2026 Kushan Manahara`. Branding, portfolio text, screenshots and third-party assets are excluded; fonts keep their own licences. Added in M0b (D28).
@@ -41,7 +43,7 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - Launch defaults approved: polling, Tailwind, no production prompt tracing, no dark mode, new Supabase project, Flash-Lite, web search on with notice, 10 papers per question / 5 per comparison.
 
 ## Open
-- No owner decisions open.
+- D36 account email sender; D37 CAPTCHA (optional); D38 logo direction.
 - Never access or modify the existing Resend setup on the owner's domain.
 
 ## Owner actions with deadlines

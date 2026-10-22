@@ -12,7 +12,9 @@ insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-00000000000a', 'user-a@example.test'),
   ('00000000-0000-0000-0000-00000000000b', 'user-b@example.test');
 
-select is((select count(*)::int from public.profiles), 2, 'a profile is created automatically for each new user');
+select is((select count(*)::int from public.profiles
+           where user_id in ('00000000-0000-0000-0000-00000000000a', '00000000-0000-0000-0000-00000000000b')),
+  2, 'a profile is created automatically for each new user');
 
 insert into public.papers (id, user_id, filename, storage_path, sha256, size_bytes, page_count, status) values
   ('10000000-0000-0000-0000-00000000000a', '00000000-0000-0000-0000-00000000000a', 'a.pdf', 'a/a.pdf', repeat('a', 64), 1000, 3, 'ready'),

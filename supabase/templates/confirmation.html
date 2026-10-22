@@ -1,0 +1,6 @@
+<!-- supabase/templates/confirmation.html -->
+<!-- SIGN-UP CONFIRMATION EMAIL. NO USER-PROVIDED TEXT IS INCLUDED (SUPABASE GUIDANCE AGAINST PHISHING ABUSE). -->
+<h2>Confirm your ExploraAi account</h2>
+<p>Someone signed up for ExploraAi with this email address. If it was you, confirm it:</p>
+<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirm my email</a></p>
+<p>The link works once and expires in 1 hour. If you didn't sign up, ignore this email.</p>

@@ -39,7 +39,7 @@ It also needs persistent private workspaces, reliable background jobs, and usage
 ```
 Browser ──► Next.js web app (Vercel, functions in Frankfurt)
    │             │
-   │             └──► Supabase Auth (Google sign-in; email links when D26 allows)
+   │             └──► Supabase Auth (email + password only, D35)
    ▼
 FastAPI API (Render Free, Frankfurt — D34) ──► Supabase (Frankfurt): Postgres + pgvector,
    │                                Storage (private), Queues (pgmq)
@@ -56,8 +56,7 @@ Python worker (inside the API service — D34) ──► reads jobs, processes P
 |---|---|---|---|
 | Gemini API | Paper chunks, questions, answers | 🔵 Google may cache in any country; abuse logs kept 55 days | Paid tier only; not used to improve Google products |
 | Tavily | Short search query, never paper text | 🟠 Outside the EU | Optional; user can turn off |
-| Sign-in email (only if a compliant no-cost option exists, D26) | Email address, one-time link | Resend: 🔵 sent from Ireland, account data stored in the US | Links single use, short-lived |
-| Google sign-in | Basic Google identity | Google | `openid`, `email`, `profile` only |
+| Account emails: confirm address, reset password, password-changed notice (D35; sender per D36) | Email address, one-time link | 🔴 Depends on D36 (e.g. Resend: 🔵 sent from Ireland, account data stored in the US) | Links single use, 1 hour; no user-provided text in emails |
 | CAPTCHA (Cloudflare Turnstile) | Browser signals | Cloudflare | Sign-in forms only |
 | Error tracking (Sentry, optional) | Error metadata, no content | EU region if available (🟠) | Personal data off |
 
@@ -139,7 +138,9 @@ Python worker (inside the API service — D34) ──► reads jobs, processes P
 - JWT verified against Supabase on every request, plus RLS.
 - Signed upload URLs; PDF validation with time and memory limits.
 - Untrusted-content framing for PDF and web text; no side-effect tools; sanitised markdown.
-- CAPTCHA and rate limits on sign-in. Generic sign-in responses (no account enumeration).
+- Email + password sign-in only (D35). Passwords ≥ 10 characters with letters and digits, enforced in the app and by Supabase Auth. Email must be confirmed before first sign-in.
+- Session cookies are HTTP-only (no browser-side Supabase client). Protected pages verify the token themselves; the proxy only redirects.
+- Rate limits on sign-in (Supabase Auth). CAPTCHA optional (D37). Generic sign-in, sign-up and reset responses (no account enumeration).
 
 **Public repository and supply chain** (🔵 the repo is public; 🔵 Trivy CVE-2026-33634):
 - Never commit secrets. `.env.example` files hold variable names only.
@@ -187,7 +188,7 @@ Python worker (inside the API service — D34) ──► reads jobs, processes P
 | Web | Vercel Hobby, $0 (🔵 non-commercial only) | Vercel Pro, $20/seat |
 | API + worker | Render Free, one web service in Frankfurt: the API with the worker running inside it (D34), $0 | Separate paid always-on instances |
 | Data | Supabase Free, $0 (🔵 pauses after 1 week without activity, no automatic backups, 500 MB database, 1 GB storage) | Supabase Pro, $25 |
-| Email | Resend Free, $0 (only if D26 allows) | Resend or AWS SES |
+| Email (account emails, D36) | 🔴 Owner decision: Resend Free, $0 (recommended) | Resend or AWS SES |
 | AI | Gemini API, pay as you go, capped (§5) | Same |
 | **Total infrastructure** | **$0/month** (Gemini usage only) | ~$84–169/month |
 
@@ -195,7 +196,11 @@ Python worker (inside the API service — D34) ──► reads jobs, processes P
 
 🟢 Owner-controlled accounts for the beta, with 2FA, scoped keys, spend caps where available, and no autoscaling. Details are in the private notes.
 
-🟢 **Sign-in:** Google sign-in first. Email links are added from the approved subdomain `exploraai.gimhara.com` only when a policy-compliant, no-cost option exists: no extra accounts to get around quotas, and no shared quota (D26). AWS SES is considered only after its expected costs are presented and approved. 🔵 Resend may withdraw its free tier without notice.
+🟢 **Sign-in (D35, 2026-10-22):** Supabase Auth with **email and password only**. No Google or other social sign-in, and no magic links.
+- 🔵 Supabase password sign-in identifies users by email or phone. A true username login would need custom code that looks up an email from a username; that adds an account-enumeration risk, so it is not used.
+- Email is needed to confirm new accounts and to reset passwords.
+- 🔵 Supabase's built-in email only reaches the project team's own addresses, with a low hourly limit. **Public sign-up needs a custom email sender (D36).** Until then, only team addresses can complete sign-up.
+- D26 still applies to that sender: no extra accounts to get around quotas, no shared quota; AWS SES only after its costs are approved. 🔵 Resend may withdraw its free tier without notice.
 
 ---
 
@@ -298,7 +303,7 @@ Out of scope for M0b: GitHub settings (separate GH step), cloud resources, DNS, 
 | Supply-chain attack via CI tools (🔵 Trivy 2026) | SHA pinning, verified installs, secret-free CI |
 | Public repo leaks operational detail | Private ops notes; review each doc before commit; push protection |
 | Content processed outside the EU (Gemini, Tavily, Resend) | Disclosed; paid Gemini; query-only Tavily; user toggle |
-| Shared or withdrawn email free tier | 🟢 D26: no extra accounts, no shared quota; Google-only sign-in until a compliant no-cost option exists; SES only after cost approval |
+| Shared or withdrawn email free tier | 🟢 D26: no extra accounts, no shared quota; SES only after cost approval. Without email, existing users can still sign in, but new sign-ups and password resets stop (D36) |
 | Claude Design closure 2026-12-14 | P0 done; owner migration and export |
 | Scanned PDFs | Clear `needs_ocr`; OCR flag ready |
 | Prompt injection from PDFs or web | Untrusted framing, no side-effect tools, citation checks |
@@ -313,9 +318,9 @@ Out of scope for M0b: GitHub settings (separate GH step), cloud resources, DNS, 
 - Frankfurt region.
 - AI caps enforced server-side and fail-closed; infrastructure costs separate.
 - Owner-controlled accounts with safeguards.
-- Google sign-in; email links when D26 allows.
+- **D35 — sign-in (2026-10-22):** Supabase Auth with email + password only. No Google OAuth, no social sign-in, no magic links, no usernames.
 - `exploraai.gimhara.com` (D24). Resend Free preferred, no paid upgrades (D25).
-- **D26:** no extra accounts to get around quotas, no shared quota. Google-only sign-in for the first release unless a compliant, no-cost email option exists. AWS SES only after expected costs are presented and approved.
+- **D26:** no extra accounts to get around quotas, no shared quota. AWS SES only after expected costs are presented and approved. (Its earlier "Google-only first" part is replaced by D35.)
 - M0a / M0b split (D27).
 - Public repo, with sensitive details kept out (D29).
 - Trivy report-only on `legacy/` once verified (D31).
@@ -334,7 +339,10 @@ Out of scope for M0b: GitHub settings (separate GH step), cloud resources, DNS, 
 - **D34 — API + worker host (2026-10-22):** one Render Free web service in Frankfurt runs the API, with the worker as a background loop in the same process. Accepted: about a 1-minute cold start after 15 idle minutes; jobs cut off by a spin-down are retried from the queue. The API and worker stay separate packages, so splitting them later is a deployment change.
 - **Launch defaults:** Render Free for the API (D34); polling for job status; Tailwind; no production prompt tracing; no dark mode at launch; a new Supabase project; Flash-Lite as the default answer model; web search on by default with a clear notice; at most 10 papers per question and 5 per comparison.
 
-**Open (🔴):** no owner decisions are open.
+**Open (🔴):**
+- **D36 — account email sender.** Needed for public sign-up and password reset. Recommended: Resend Free from `exploraai.gimhara.com` (D24, D25), which needs DNS records on that subdomain. Details: `logs/2026-10-22-m1-auth.md`.
+- **D37 — CAPTCHA on sign-up/sign-in.** Optional. Cloudflare Turnstile is free and supported by Supabase Auth; it needs a Cloudflare account.
+- **D38 — logo direction.** Options A, B, C in `design/brand-options/`.
 
 **Owner actions (not decisions):** migrate the design system in Claude and export the project zip before 2026-12-14 (§8). Save the private operations notes.
 

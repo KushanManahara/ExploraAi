@@ -17,6 +17,7 @@ An AI research workspace for your own papers. Upload research PDFs, ask question
 | `context/` | Short project status and handoff notes |
 | `logs/` | Dated audit and milestone records |
 | `design/claude-design/` | Reference snapshot of the design system (not MIT-licensed, see [Licensing](#licensing)) |
+| `design/brand-options/` | ExploraAi logo options under review (brand assets, not MIT-licensed) |
 | `legacy/` | Frozen 2024 prototype, kept for reference only; not built or deployed |
 
 ## Development

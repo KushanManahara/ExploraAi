@@ -9,6 +9,12 @@ Everything in `design/claude-design/` is a preserved reference snapshot of a per
 - All rights reserved by Kushan Manahara, unless a file states otherwise.
 - Don't reuse these assets without permission.
 
+## ExploraAi brand marks
+The logo and icon options in `design/brand-options/` (the `.svg` files and `preview.html`) are brand assets, not code.
+- All rights reserved by Kushan Manahara.
+- The letterforms are outlined from the OFL fonts below. Using OFL fonts to make a logo is allowed, and the logo files are not font software.
+- The generator scripts in `design/brand-options/tools/` are project code and are covered by the MIT License.
+
 ## Fonts
 The font files in `design/claude-design/fonts/` keep their original licence, the **SIL Open Font License 1.1**:
 - **Familjen Grotesk**: Copyright 2021 The Familjen Grotesk Project Authors (https://github.com/Familjen-Sthlm/Familjen-Grotesk).
