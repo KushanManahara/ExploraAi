@@ -111,7 +111,7 @@ Milestone M0b (plan §10.1), run one step at a time with owner approval before e
 | Corepack with a deliberately wrong hash | Refused ("Mismatch hashes"); the computed real hash equals the pinned one |
 | pip with a deliberately wrong uv hash | Refused; the computed real hash equals the pinned one |
 
-- The first real CI run happens when the commits are pushed (held until Step 6). Its result is recorded then.
+- The first real CI run happened at the Step 6 push. Result in "Push and first CI run" at the end of this log.
 - Trivy security scanning is Step 5.
 
 ### Cost
@@ -188,3 +188,16 @@ All Trivy calls use `--skip-version-check --disable-telemetry`. 🔵 Trivy sends
 
 ### Notes
 - The root README was missing between Step 1 and Step 6. That's why the push was held until now: published history moves from the old README straight to this one.
+
+## Push and first CI run
+- **Push:** 6 commits (`d4eeec8`, `f765d07`, `62b3635`, `09c14ed`, `542d622`, `5be90e2`) to `claude/sharp-ride-8yerle`, moving the branch from `9edb334` to `5be90e2`. Only the designated branch was used.
+- **First CI run:** GitHub Actions run #1 (`39717137795`) on `5be90e2`: **success**.
+
+| Job | Result |
+|---|---|
+| Python (ruff, ruff format, mypy strict, pytest) | Success |
+| Web (eslint, tsc, prettier, vitest, next build) | Success |
+| Security (Trivy: verified install, new-code gate, whole-repo secret scan, legacy report) | Success |
+
+- Hosted runners behaved as the local dry runs predicted. No fixes were needed.
+- **M0b is complete.**
