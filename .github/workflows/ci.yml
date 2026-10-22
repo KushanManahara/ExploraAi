@@ -96,6 +96,35 @@ jobs:
       - name: Next.js production build
         run: pnpm build
 
+  database:
+    name: Database (migrations, RLS tests)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # SUPABASE CLI, PINNED BY THE SHA-256 PUBLISHED IN THE RELEASE checksums.txt (VERIFIED 2026-10-22).
+      SUPABASE_CLI_VERSION: "2.121.0"
+      SUPABASE_CLI_SHA256: "4b481189efbdc57cf2d37bdee5f1a0d29574314398564b32a6dfb76c0fcf275f"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Supabase CLI (pinned release, SHA-256 verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o supabase.tar.gz "https://github.com/supabase/cli/releases/download/v${SUPABASE_CLI_VERSION}/supabase_${SUPABASE_CLI_VERSION}_linux_amd64.tar.gz"
+          echo "${SUPABASE_CLI_SHA256}  supabase.tar.gz" | sha256sum --check --strict -
+          tar -xzf supabase.tar.gz supabase
+          "$RUNNER_TEMP/supabase" --version
+
+      - name: Start local database and apply migrations
+        run: '"$RUNNER_TEMP/supabase" db start'
+
+      - name: Run database tests (pgTAP, incl. row-level-security isolation)
+        run: '"$RUNNER_TEMP/supabase" test db'
+
   security:
     name: Security (Trivy)
     runs-on: ubuntu-24.04

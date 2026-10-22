@@ -9,13 +9,14 @@ Authoritative plan: `docs/implementation-plan.md`. Evidence: `logs/`.
 - P0 done: commit `bddf81f`, only `design/claude-design/` (107 files + `MANIFEST.md`), checksums verified. 🟢 Fully approved 2026-10-22. Design assets stay unchanged.
 - M0a (read-only audit) done 2026-10-22. Findings in `logs/2026-10-21-audit.md`.
 - M0b steps 1–6 done 2026-10-22 (legacy move, skeleton, tooling, CI, Trivy, README/SECURITY/LICENSE). Record: `logs/2026-10-22-m0b-foundations.md`. Pushed (`5be90e2`); first GitHub CI run green (all 3 jobs).
+- M1 local part done 2026-10-22: full schema migration, RLS (read-own-rows only; writes via API/worker), 24 pgTAP isolation tests passing, pgmq 1.5.1 confirmed locally, database CI job. Record: `logs/2026-10-22-m1-local-database.md`.
 - Tool versions in use: TypeScript 6.0.3 (typescript-eslint limit), ESLint 10, pnpm 10.28.0, Trivy v0.76.0.
 - Open review items: `httpx` deprecation warning (kept by owner decision); `braces` CVE-2026-93687 exception expires 2026-11-22.
 - No cloud resources, DNS changes, GitHub setting changes or spending.
 
 ## Next
 1. GitHub security settings: secret scanning + push protection already on. Remaining items must be clicked by the owner (this session's proxy blocks settings writes); checklist in `logs/2026-10-22-m0b-foundations.md` ("GitHub security settings").
-2. "Before M1": accounts, subscriptions, DNS records (each needs approval).
+2. M1 cloud part (owner decision on cost): create the hosted Supabase project (Frankfurt), apply the migration, Google sign-in, API JWT check, brand options.
 
 ## Confirmed decisions
 - Clean rebuild. Prototype kept unchanged in `legacy/` until the owner approves removal.
