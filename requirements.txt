@@ -69,7 +69,7 @@ psutil==5.9.8
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pyarrow==16.0.0
-pyasn1==0.6.0
+pyasn1==0.6.5
 pyasn1_modules==0.4.0
 pydantic==2.7.1
 pydantic_core==2.18.2
