@@ -96,7 +96,7 @@ streamlit==1.33.0
 tenacity==8.2.3
 toml==0.10.2
 toolz==0.12.1
-tornado==6.4
+tornado==6.6.1
 tqdm==4.66.2
 traitlets==5.14.3
 typing-inspect==0.9.0
